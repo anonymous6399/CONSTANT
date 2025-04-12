@@ -1,0 +1,7 @@
+2025-04-10T15:23:43.811227+0700 INFO Number of trainable parameters of Full network : 124041700
+2025-04-10T15:23:43.811683+0700 INFO Number of trainable parameters of vae : 0
+2025-04-10T15:23:43.811928+0700 INFO Number of trainable parameters of diffusion : 101310980
+2025-04-10T15:23:43.812157+0700 INFO Number of trainable parameters of style_extractor : 13750240
+2025-04-10T15:23:43.812362+0700 INFO Number of trainable parameters of text_encoder : 8696320
+2025-04-10T15:23:43.812566+0700 INFO Number of trainable parameters of style_constrastive_enchance : 0
+2025-04-10T15:23:43.812778+0700 INFO Number of trainable parameters of patch_constrastive_enchance : 284160

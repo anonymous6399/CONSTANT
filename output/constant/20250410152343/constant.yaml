@@ -1,0 +1,136 @@
+DATASET_CLS: IAMDatasetVariableStyleReference
+constrastive:
+  params:
+    clip_params: null
+    loss_weight: 0.1
+  target: src.model.sce.StyleContrastiveEnhanceCLIP
+content_constrastive:
+  params:
+    gradient_flows_to_negative_nce: false
+    input_size:
+    - 8
+    - 32
+    layer_weight_multiplier: 1.0
+    loss_weight: 0.1
+    nc: 256
+    nce_fake_negatives: false
+    nce_t: 0.07
+    num_feats: 3
+    num_patches: 256
+  target: src.model.pce.PatchContrastiveNCE
+context_dim: 512
+dataset:
+  params:
+    full_dict_path: IAM_transcriptions.json
+    gt_path: dataset/IAM/gt/gan.iam.tr_va.gt.filter27
+    image_path: dataset/IAM/data/rescale_images
+    max_length: null
+    max_width: 352
+    min_width: 64
+    random_style_image: true
+    tokenizer_type: Char_Tokenizer
+    transform_level: none
+    writer_dict_path: writers_dict_train.json
+  target: src.data.dataset.IAMDatasetVariableStyleReference
+diffusion:
+  params:
+    backbone_params:
+      attention_resolutions:
+      - 1
+      - 1
+      channel_mult:
+      - 1
+      - 1
+      condition_fusion: cross_attn
+      context_dim: 512
+      image_size:
+      - 8
+      - 32
+      in_channels: 4
+      model_channels: 512
+      num_heads: 4
+      num_res_blocks: 1
+      out_channels: 4
+    clfree_params:
+      cond_drop_prob: 0.2
+      cond_scale: 6
+      rescaled_phi: 0.7
+    ddim_sampling: true
+    down_sample: 8
+    fp16: false
+    img_size:
+    - 64
+    - 256
+    input_channel: 4
+    latent: true
+    loss_weight: 1.0
+    noise_steps: 1000
+    sampling_steps: 50
+  target: src.model.diffusion.DiffusionEngine
+max_length: null
+metric:
+  save_top_k: 1
+ocr: null
+pipeline:
+  target: src.model.pipeline.HandwritingGenerationPipeline
+style_extractor:
+  params:
+    attn_pool_params:
+      embed_dim: 768
+      feat_size:
+      - 2
+      - 20
+      in_features: 1536
+      num_heads: 4
+      out_features: 512
+    codebook_params:
+      beta: 0.25
+      downsample: 1
+      latent_dim: 768
+      num_codebook_vectors: 1024
+    loss_weight: 0.1
+    pretrained_path: pretrained/pt_inception-2015-12-05-6726825d.pth
+  target: src.model.SAQ.VectorQuantizedStylePredictorAttentionPoolConcat
+testdataset:
+  params:
+    full_dict_path: IAM_test_transcriptions.json
+    gt_path: dataset/IAM/gt/gan.iam.test.gt.filter27
+    image_path: dataset/IAM/data/rescale_images
+    max_length: null
+    max_width: 352
+    min_width: 64
+    random_style: false
+    random_style_image: false
+    tokenizer_type: Char_Tokenizer
+    transform_level: none
+    writer_dict_path: writers_dict_test.json
+  target: src.data.dataset.IAMDatasetVariableStyleReference
+text_encoder:
+  params:
+    context_dim: 512
+    drop_rate: 0.1
+    enc_depth: 3
+    input_size: 53
+    max_seq_len: 1000
+  target: src.model.content_encoder.CharacterEncoder
+tokenizer_type: Char_Tokenizer
+training:
+  amp: true
+  base_lr: 0.0001
+  batch_size: 64
+  iteration: 800000
+  log_image_buffer: 20
+  log_interval: 500
+  loss_balancing: true
+  num_workers: 8
+  output_dir: output
+  sampler:
+    target: src.data.sampler.ByWriterIDSampler
+  save_interval: 10000
+  update_ema: false
+  use_collate_fn: true
+  val_batch_size: 64
+  valid: false
+vae:
+  vae_pretrained_path: pretrained
+wid: null
